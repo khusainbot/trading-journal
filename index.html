@@ -1,52 +1,559 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KHALID DAILY JOURNAL</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KHALID DAILY JOURNAL</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-  body{margin:0;background:#0a0e17;font-family:'Poppins',sans-serif;color:#eee}
-  .container{max-width:500px;margin:20px auto;background:linear-gradient(135deg,#0f1625,#1a2332);border-radius:24px;overflow:hidden;box-shadow:0 20px 60px rgba(0,255,255,.3);border:2px solid #00ffff}
-  header{background:linear-gradient(90deg,#00ffff,#00d4ff);padding:30px;text-align:center}
-  h1{margin:0;font-family:'Montserrat',sans-serif;font-size:2.6rem;color:#000}
-  .quote{padding:20px 30px;font-style:italic;text-align:center;color:#88ffff;background:rgba(0,255,255,.1);margin:20px;border-left:4px solid #00ffff}
+  /* Base Colors (Neon Green & Deep Blue) */
+  :root {
+    --bg-dark: #0a0e17;
+    --card-bg-start: #0f1625;
+    --card-bg-end: #1a2332;
+    --primary-color: #00ffff; /* Cyan/Long */
+    --primary-glow: rgba(0,255,255,.15); /* Reduced opacity for softer glow */
+    --secondary-color: #ff3366; /* Red/Short */
+    --secondary-glow: rgba(255,51,102,.15); /* Reduced opacity for softer glow */
+    --text-light: #eee;
+    
+    /* Active/Focus and Error Glow Variables will be dynamically set on the .container */
+    --active-color: var(--primary-color);
+    --active-glow: var(--primary-glow);
+    --validation-error-color: var(--secondary-color); /* Default to Red for general errors */
+    --validation-error-glow: var(--secondary-glow); /* Default to Red glow */
+  }
+
+  /* Applied Orbitron to the entire body, setting base weight for legibility */
+  body{margin:0;background:var(--bg-dark);font-family:'Orbitron',sans-serif;color:var(--text-light); font-weight: 500;}
+  .container{
+    max-width:500px;margin:20px auto;
+    background:linear-gradient(135deg,var(--card-bg-start),var(--card-bg-end));
+    border-radius:24px;overflow:hidden;
+    box-shadow:0 20px 60px var(--primary-glow);
+    border:2px solid var(--primary-color); 
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  /* DIGITAL DISPLAY LINE (Default/Long) */
+  .display-line {
+    height: 10px;
+    background: var(--bg-dark);
+    border-bottom: 2px solid var(--primary-color);
+    box-shadow: 0 0 10px var(--primary-color);
+    margin-bottom: -2px;
+    position: relative;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  /* Header (Default/Long) */
+  header{
+    background:linear-gradient(90deg,var(--primary-color),#00d4ff);
+    padding:25px 20px;
+    text-align:center;
+    transition: background 0.3s ease;
+  }
+
+  /* Header SHORT Active Style */
+  header.short-active {
+    background: linear-gradient(90deg, var(--secondary-color), #ff6699);
+  }
+  
+  /* Display Line SHORT Active Style */
+  #header-line.short-active {
+    border-bottom-color: var(--secondary-color);
+    box-shadow: 0 0 10px var(--secondary-color);
+  }
+
+  /* Container Border SHORT Active Style */
+  .container.short-active {
+    border-color: var(--secondary-color);
+    box-shadow: 0 20px 60px var(--secondary-glow);
+  }
+  
+  /* H1 - Title Size */
+  h1{
+    margin:0 0 5px 0;
+    font-size:2.4rem; 
+    font-weight: 800;
+    color:#000;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 0 rgba(255,255,255,0.7);
+    transition: font-size 0.3s ease, margin-bottom 0.3s ease;
+  }
+
+  /* Compacted title style */
+  .title-compact {
+    font-size: 1.6rem !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Header Quote style - Adjusted font size for Orbitron */
+  .header-quote {
+    margin: 0;
+    font-style: normal;
+    font-size: 0.75rem;
+    color: #0d0d17;
+    font-weight: 600;
+  }
+  
+  /* Direction Buttons Container */
+  .direction{display:flex;gap:15px;margin-top:20px;margin-bottom:25px}
+  
+  /* Direction Button Base Style (Initial state: large) */
+  .dir-btn{
+    flex:1;
+    padding:18px;
+    border-radius:50px;
+    font-weight:700;
+    cursor:pointer;
+    text-align:center;
+    transition: all .3s ease-in-out; 
+    letter-spacing: 1px;
+  }
+
+  /* Compacted direction button style */
+  .dir-btn.dir-compact {
+    padding: 10px 15px;
+    font-size: 0.7rem;
+    letter-spacing: 0px;
+    flex: 0 1 auto;
+    min-width: 60px;
+    opacity: 0.7;
+  }
+  
+  .buy{background:var(--primary-color);color:#000}
+  .sell{background:#330000;border:2px solid var(--secondary-color);color:var(--secondary-color)}
+  .buy.active{background:var(--primary-color);color:#000;box-shadow:0 0 20px var(--primary-color); opacity: 1;}
+  .sell.active{background:var(--secondary-color);color:#fff;box-shadow:0 0 20px var(--secondary-color); opacity: 1;}
+  
+  /* Form Grid & Groups */
   form{padding:30px}
-  .direction{display:flex;gap:15px;margin-bottom:25px}
-  .dir-btn{flex:1;padding:18px;border-radius:50px;font-weight:700;cursor:pointer;text-align:center;transition:.3s}
-  .buy{background:#00ffff;color:#000}.sell{background:#330000;border:2px solid #ff3366;color:#ff3366}
-  .buy.active{background:#00ffff;color:#000;box-shadow:0 0 20px #00ffff}
-  .sell.active{background:#ff3366;color:#fff;box-shadow:0 0 20px #ff3366}
   .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
   .form-group{position:relative;margin-bottom:18px}
-  label{position:absolute;top:-10px;left:14px;background:#1a2332;padding:0 10px;font-size:0.85rem;color:#00ffff;font-weight:600}
-  input{padding:16px 18px;border:2px solid #333;border-radius:16px;background:#252d40;color:white;font-size:1rem;width:100%;box-sizing:border-box}
-  input:focus{border-color:#00ffff;outline:none;box-shadow:0 0 0 4px rgba(0,255,255,.3)}
-  .submit{margin-top:30px;padding:20px;background:#00ffff;color:#000;border:none;border-radius:50px;font-size:1.5rem;font-weight:800;cursor:pointer;width:100%}
-  .submit:hover{box-shadow:0 0 30px #00ffff}
-</style></head><body>
-<div class="container">
-<header><h1>KHALID DAILY JOURNAL</h1></header>
-<div class="quote">"The trader who doesn’t journal is flying blind. The one who does, becomes legendary." – Khalid</div>
+
+  /* Hide the Up/Down Spinners on number inputs for a cleaner, futuristic look */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+  
+  /* Input Styling */
+  input{
+    padding:16px 18px;
+    border:2px solid #333;
+    border-radius:16px;
+    background:#252d40;
+    color:white; /* Base text color */
+    font-size:0.9rem;
+    width:100%;
+    box-sizing:border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Add transition for smoothness */
+  }
+
+  /* NEW: Highlight invalid fields using dynamic error color and glow */
+  input:invalid:not(:placeholder-shown) {
+      border-color: var(--validation-error-color) !important;
+      box-shadow: 0 0 10px var(--validation-error-glow), 0 0 1px var(--validation-error-color) !important;
+  }
+  
+  /* Focus style for inputs */
+  input:focus{
+    border-color:var(--active-color); 
+    outline:none;
+    box-shadow: 0 0 10px var(--active-glow), 0 0 1px var(--active-color); 
+  }
+
+  /* Force input text color to be neon when value is present (or focused) */
+  .form-group input:focus,
+  .form-group input:not(:placeholder-shown) {
+      color: var(--active-color);
+  }
+  
+  /* Styling for the datetime-local input specifically */
+  input[type="datetime-local"] {
+    color: var(--active-color);
+  }
+
+  /* Style for the calendar/clock icon in Webkit browsers (Chrome, Safari, Edge) */
+  input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+    opacity: 0.8;
+  }
+
+  /* Floating Label Styles */
+  .form-group label{
+    position:absolute;top: 50%;left: 18px;transform: translateY(-50%);background: none;padding: 0;
+    font-size: 0.9rem;
+    color: #ccc;font-weight: 400;pointer-events: none;transition: all .3s cubic-bezier(0.25, 0.46, 0.45, 0.94);z-index: 10;
+  }
+  
+  /* State for active/filled input */
+  .form-group input:focus + label,
+  .form-group input:not(:placeholder-shown) + label {
+    top: 0;left: 10px;transform: translateY(-50%);
+    font-size: 0.75rem;
+    background: var(--card-bg-start);padding: 0 5px;
+    color: var(--active-color);
+    font-weight: 600;
+  }
+  
+  /* The readonly Order input should always have its label floated */
+  #order + label {
+    top: 0;left: 10px;transform: translateY(-50%);
+    font-size: 0.75rem;
+    background: var(--card-bg-start);padding: 0 5px;
+    color: var(--active-color);
+    font-weight: 600;
+  }
+
+  /* Make placeholder transparent so :not(:placeholder-shown) works cleanly */
+  input::placeholder { color: transparent; }
+  
+  /* --- SUBMIT AREA STYLES --- */
+  .submit-action-area {
+    margin-top: 30px;
+  }
+  /* NEW: Status message box */
+  .status-message {
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--active-color);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  /* NEW: Animated pulse for check text */
+  .status-message.animate {
+    opacity: 1;
+    animation: pulse 1s infinite alternate;
+  }
+  /* NEW: Error style */
+  .status-message.status-error {
+      color: var(--validation-error-color); /* Use the dynamic error color for the text */
+      opacity: 1;
+      animation: none;
+  }
+  @keyframes pulse {
+    from { opacity: 0.7; }
+    to { opacity: 1; }
+  }
+
+  /* Submit Button (Default/Long) */
+  .submit{
+    padding:20px;
+    background:var(--primary-color);
+    color:#000;border:none;border-radius:50px;
+    font-family: 'Orbitron', sans-serif;
+    font-size:1.5rem;font-weight:800;cursor:pointer;width:100%;
+    transition: all 0.3s ease;
+  }
+  .submit:hover{
+    box-shadow:0 0 30px var(--primary-glow);
+  }
+
+  /* Submit Button Short Active Style */
+  .submit.short-active {
+    background: var(--secondary-color);
+  }
+  .submit.short-active:hover {
+    box-shadow: 0 0 30px var(--secondary-glow);
+  }
+</style>
+</head>
+<body>
+<div class="container" id="main-container">
+<div class="display-line" id="header-line"></div>
+<header id="main-header">
+  <h1 id="journal-title">KHALID DAILY JOURNAL</h1>
+  <p class="header-quote">"Journaling is the blueprint to trading consistency. Document every decision." – Khalid</p>
+</header>
 <form method="post" action="https://script.google.com/macros/s/AKfycbyx0lL7L4oF8lD8vhXI93sXrbI3R3V4C8WUoAHye9P4gqJo2zTSbihyO-d1cIQLvOA-gg/exec">
   <div class="direction">
-    <div class="dir-btn buy active" onclick="setDir('BUY')">LONG</div>
-    <div class="dir-btn sell" onclick="setDir('SELL')">SHORT</div>
+    <div class="dir-btn buy active" onclick="setDir('BUY', this)">LONG</div>
+    <div class="dir-btn sell" onclick="setDir('SELL', this)">SHORT</div>
   </div>
   <div class="form-grid">
-    <div class="form-group"><label>Ticket</label><input type="number" name="ticket" required></div>
-    <div class="form-group"><label>Symbol</label><input type="text" name="symbol" list="symbols" required></div>
-    <div class="form-group"><label>Order</label><input type="text" name="order" id="order" value="BUY" readonly></div>
-    <div class="form-group"><label>Lot Size</label><input type="number" step="0.01" name="lot" required></div>
-    <div class="form-group"><label>Open Price</label><input type="number" step="0.00001" name="openprice" required></div>
-    <div class="form-group"><label>Stop Loss</label><input type="number" step="0.00001" name="sl" required></div>
-    <div class="form-group"><label>Take Profit</label><input type="number" step="0.00001" name="tp" required></div>
-    <div class="form-group"><label>Close Price</label><input type="number" step="0.00001" name="close"></div>
-    <div class="form-group full"><label>Open Time</label><input type="datetime-local" name="opentime" required></div>
+    
+    <div class="form-group">
+      <input type="number" name="ticket" placeholder=" " required>
+      <label>Ticket</label>
+    </div>
+    
+    <div class="form-group">
+      <input type="text" name="symbol" id="symbol-input" list="symbols" placeholder=" " autocomplete="off" required>
+      <label>Symbol</label>
+    </div>
+    
+    <div class="form-group">
+      <input type="text" name="order" id="order" value="BUY" readonly>
+      <label>Order</label>
+    </div>
+    
+    <div class="form-group">
+      <input type="number" step="0.01" name="lot" placeholder=" " required>
+      <label>Lot Size</label>
+    </div>
+    
+    <div class="form-group">
+      <input type="number" step="0.00001" name="openprice" placeholder=" " required>
+      <label>Open Price</label>
+    </div>
+    
+    <div class="form-group">
+      <input type="number" step="0.00001" name="sl" placeholder=" " required>
+      <label>Stop Loss</label>
+    </div>
+    
+    <div class="form-group">
+      <input type="number" step="0.00001" name="tp" placeholder=" " required>
+      <label>Take Profit</label>
+    </div>
+    
+    <div class="form-group">
+      <input type="number" step="0.00001" name="close" placeholder=" ">
+      <label>Close Price</label>
+    </div>
+    
+    <div class="form-group full">
+      <input type="datetime-local" name="opentime" placeholder=" " required>
+      <label>Open Time</label>
+    </div>
   </div>
-  <button type="submit" class="submit">POST</button>
+    
+  <div class="submit-action-area">
+      <div id="status-message" class="status-message"></div>
+      <button type="submit" class="submit" id="submit-btn">POST</button>
+  </div>
 </form>
+
 <datalist id="symbols">
-  <option value="XAUUSD"><option value="EURUSD"><option value="GBPUSD"><option value="AUDCAD"><option value="BTCUSD">
-  <!-- add more if you want -->
+  <option value="EURUSD"><option value="GBPUSD"><option value="USDJPY"><option value="USDCHF">
+  <option value="AUDUSD"><option value="USDCAD"><option value="NZDUSD"><option value="EURJPY">
+  <option value="GBPJPY"><option value="EURGBP"><option value="AUDCAD"><option value="EURAUD">
+  <option value="AUDJPY"><option value="GBPAUD"><option value="CADJPY"><option value="CHFJPY">
+  <option value="XAUUSD"><option value="XAGUSD"><option value="XPTUSD"><option value="XPDUSD">
+  <option value="BTCUSD"><option value="ETHUSD"><option value="LTCUSD"><option value="BCHUSD">
+  <option value="XRPUSD"><option value="SOLUSD"><option value="ADAUSD"><option value="DOGEUSD">
 </datalist>
+
 <script>
-function setDir(d){document.getElementById('order').value=d;document.querySelectorAll('.dir-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');}
-document.querySelector('[name="opentime"]').value=new Date().toISOString().slice(0,16);
+// --- GLOBAL STATE & MAPPING ---
+let submissionState = 0; // 0: Check mode (default), 1: Post mode
+
+const priceFormatMap = {
+  // 5 decimal places (step="0.00001") - standard micro-pip
+  EURUSD: 5, GBPUSD: 5, AUDUSD: 5, NZDUSD: 5, USDCHF: 5, USDCAD: 5, EURGBP: 5, AUDCAD: 5, EURAUD: 5, GBPAUD: 5,
+  // 3 decimal places (step="0.001") - JPY micro-pip
+  USDJPY: 3, EURJPY: 3, GBPJPY: 3, CADJPY: 3, CHFJPY: 3,
+  // 2 decimal places (step="0.01") - Metals/Crypto
+  XAUUSD: 2, XAGUSD: 2, XPTUSD: 2, XPDUSD: 2,
+  BTCUSD: 2, ETHUSD: 2, LTCUSD: 2, BCHUSD: 2, XRPUSD: 2, SOLUSD: 2, ADAUSD: 2, DOGEUSD: 2
+};
+
+const form = document.querySelector('form');
+const symbolInput = document.getElementById('symbol-input');
+const submitBtn = document.getElementById('submit-btn');
+const statusMessage = document.getElementById('status-message');
+const container = document.getElementById('main-container');
+
+
+// --- PRICE VALIDATION FUNCTIONS ---
+function getStepValue(decimals) {
+  if (decimals === 0) return '1';
+  return '0.' + '0'.repeat(decimals - 1) + '1';
+}
+
+function setPriceSteps(symbol) {
+  const symbolUpper = symbol.toUpperCase();
+  // Default to 5 decimals if symbol is not found
+  const decimals = priceFormatMap[symbolUpper] !== undefined ? priceFormatMap[symbolUpper] : 5;
+  const step = getStepValue(decimals);
+
+  const priceFields = ['openprice', 'sl', 'tp', 'close'];
+  priceFields.forEach(name => {
+    const input = form.querySelector(`[name="${name}"]`);
+    if (input) {
+      // Set the step attribute for browser handling (spinners, native check)
+      input.setAttribute('step', step);
+      // Store the expected decimals for custom validation
+      input.dataset.decimals = decimals;
+      input.setCustomValidity('');
+    }
+  });
+  
+  // Reset submission state when symbol changes
+  resetSubmissionState();
+}
+
+function validatePrices() {
+  const priceFields = ['openprice', 'sl', 'tp', 'close'];
+  let isValid = true;
+  const currentSymbol = symbolInput.value.toUpperCase();
+
+  priceFields.forEach(name => {
+    const input = form.querySelector(`[name="${name}"]`);
+    const value = input.value;
+    const requiredDecimals = parseInt(input.dataset.decimals);
+    
+    // Skip empty 'Close Price' or other non-required fields if empty
+    if (value === '') return;
+
+    // 1. Get actual decimal count
+    const parts = value.split('.');
+    const actualDecimals = parts.length === 2 ? parts[1].length : 0;
+    
+    // 2. Check decimal count against required
+    if (actualDecimals > requiredDecimals) {
+      input.setCustomValidity(`Price must have at most ${requiredDecimals} decimal places for ${currentSymbol}.`);
+      isValid = false;
+    } else {
+      input.setCustomValidity('');
+    }
+    
+    // This forces the browser to show the custom validity message
+    input.reportValidity();
+  });
+  
+  return isValid;
+}
+
+
+// --- TWO-STEP SUBMISSION LOGIC ---
+function resetSubmissionState() {
+    submissionState = 0;
+    statusMessage.classList.remove('animate', 'status-error');
+    statusMessage.textContent = '';
+    submitBtn.textContent = 'POST';
+}
+
+function handleSubmit(event) {
+  
+  // 1. Perform custom price validation
+  const pricesValid = validatePrices();
+  
+  // 2. Perform native browser validation
+  const nativeValid = form.checkValidity();
+
+  if (!nativeValid || !pricesValid) {
+    // If validation fails (native or custom)
+    submissionState = 0; // Reset state
+    statusMessage.classList.remove('animate');
+    statusMessage.textContent = '❌ Please fix errors above before posting.';
+    statusMessage.classList.add('status-error');
+    event.preventDefault(); // Stop submission
+    return;
+  }
+  
+  // Validation passed
+  statusMessage.classList.remove('status-error');
+
+  if (submissionState === 0) {
+    // First Click: Check mode
+    event.preventDefault(); // Stop submission
+    submissionState = 1;
+    
+    // Change button text and show animated message
+    submitBtn.textContent = 'CONFIRM POST';
+    statusMessage.textContent = '✅ Review all entries and confirm post.';
+    statusMessage.classList.add('animate');
+    
+  } else if (submissionState === 1) {
+    // Second Click: Actual submission
+    // The form is allowed to submit here
+    statusMessage.classList.remove('animate');
+    statusMessage.textContent = 'Posting trade...';
+    // The form will now submit naturally.
+    submissionState = 0; // Reset for next interaction/page reload
+  }
+}
+
+// --- DIRECTION TOGGLE (EXISTING FUNCTION, MODIFIED) ---
+function setDir(d, element){
+  document.getElementById('order').value=d;
+  
+  // 1. Compact ALL buttons, and remove active state
+  document.querySelectorAll('.dir-btn').forEach(b => {
+    b.classList.remove('active');
+    b.classList.add('dir-compact'); 
+  });
+  
+  // 2. Expand and activate the CLICKED button
+  element.classList.add('active');
+  element.classList.remove('dir-compact'); 
+
+  // 3. Compact the main title
+  document.getElementById('journal-title').classList.add('title-compact');
+  
+  // 4. Change Header, Container, Submit Button, and FOCUS GLOW/ERROR Color based on selection
+  const header = document.getElementById('main-header');
+  const line = document.getElementById('header-line');
+  const submitBtn = document.getElementById('submit-btn');
+
+  resetSubmissionState(); // Reset submission state on direction change
+
+  if (d === 'SELL') {
+    header.classList.add('short-active');
+    line.classList.add('short-active');
+    container.classList.add('short-active');
+    submitBtn.classList.add('short-active');
+    
+    // Active colors are SHORT (RED)
+    container.style.setProperty('--active-color', 'var(--secondary-color)');
+    container.style.setProperty('--active-glow', 'var(--secondary-glow)');
+    
+    // NEW: Validation error color is PRIMARY (BLUE/CYAN)
+    container.style.setProperty('--validation-error-color', 'var(--primary-color)');
+    container.style.setProperty('--validation-error-glow', 'var(--primary-glow)');
+
+  } else {
+    header.classList.remove('short-active');
+    line.classList.remove('short-active');
+    container.classList.remove('short-active');
+    submitBtn.classList.remove('short-active');
+
+    // Active colors are LONG (CYAN)
+    container.style.setProperty('--active-color', 'var(--primary-color)');
+    container.style.setProperty('--active-glow', 'var(--primary-glow)');
+
+    // NEW: Validation error color is SECONDARY (RED)
+    container.style.setProperty('--validation-error-color', 'var(--secondary-color)');
+    container.style.setProperty('--validation-error-glow', 'var(--secondary-glow)');
+  }
+}
+
+function initializeColors() {
+    // Initial color setup for the default 'BUY' mode
+    container.style.setProperty('--active-color', 'var(--primary-color)');
+    container.style.setProperty('--active-glow', 'var(--primary-glow)');
+    container.style.setProperty('--validation-error-color', 'var(--secondary-color)');
+    container.style.setProperty('--validation-error-glow', 'var(--secondary-glow)');
+}
+
+
+// --- INITIALIZATION ---
+document.addEventListener('DOMContentLoaded', () => {
+    initializeColors();
+    // Set initial price steps (default EURUSD/5 decimals)
+    setPriceSteps(symbolInput.value || 'EURUSD'); 
+    
+    // Set current time on load
+    document.querySelector('[name="opentime"]').value=new Date().toISOString().slice(0,16);
+
+    // Event listener for symbol change to update price steps and reset check state
+    symbolInput.addEventListener('change', (e) => setPriceSteps(e.target.value));
+
+    // Event listener for two-step submission
+    form.addEventListener('submit', handleSubmit);
+});
 </script>
-</body></html>
+</body>
+</html>
