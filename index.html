@@ -12,7 +12,7 @@
     --dark:#0a0f23;--darker:#0d1428;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
-  
+ 
   body{
     font-family:'Orbitron',sans-serif;
     background: #000;
@@ -25,7 +25,6 @@
     align-items:center;
     padding:20px;
   }
-
   .nebula{
     position:fixed;
     top:0; left:0; width:100%; height:100%;
@@ -40,7 +39,6 @@
     0%{transform:scale(1); opacity:0.5;}
     100%{transform:scale(1.1); opacity:0.7;}
   }
-
   .stars{
     position:fixed;
     top:0; left:0; width:100%; height:100%;
@@ -58,7 +56,6 @@
     0%{opacity:0.3; transform:scale(0.8);}
     100%{opacity:1; transform:scale(1.2);}
   }
-
   .container{
     width:100%; max-width:1100px;
     background:rgba(10,15,35,0.95);
@@ -74,7 +71,6 @@
     border-color:var(--pink);
     box-shadow:0 0 100px rgba(255,51,102,0.7), inset 0 0 40px rgba(255,51,102,0.1);
   }
-
   header{
     background:var(--cyan);
     padding:18px 20px;
@@ -91,7 +87,6 @@
     border-radius:30px; font-size:0.9rem; font-weight:800; letter-spacing:3px;
     box-shadow:inset 0 0 20px rgba(0,0,0,0.6);
   }
-
   .direction{display:flex;justify-content:center;gap:30px;margin:24px 0 28px;}
   .dir-btn{
     padding:16px 58px; border-radius:50px; font-size:1.4rem; font-weight:900;
@@ -100,7 +95,6 @@
   .buy{background:var(--cyan);color:#000;}
   .sell{background:#330011;color:var(--pink);border:3px solid var(--pink);}
   .sell.active{background:var(--pink);color:#fff;box-shadow:var(--glow-pink);}
-
   .main-grid{
     display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px;
     padding:0 30px 30px;
@@ -117,7 +111,6 @@
     color:var(--cyan); text-shadow:0 0 15px; letter-spacing:1px;
   }
   .container.short .card h3{color:var(--pink);}
-
   .check-item{
     display:flex; align-items:center; justify-content:space-between;
     padding:11px 0; font-size:0.95rem; font-weight:700;
@@ -131,7 +124,6 @@
     accent-color:var(--pink); filter:drop-shadow(0 0 12px var(--pink));
   }
   .check-item .weight{font-size:0.72rem;color:#0f0;opacity:0.8;}
-
   .form-group{position:relative;margin:14px 0;}
   input{
     width:100%; padding:14px 16px; background:var(--darker);
@@ -152,7 +144,6 @@
   }
   .container.short input:focus + label,
   .container.short input:not(:placeholder-shown) + label{color:var(--pink);}
-
   .submit-wrapper{text-align:center;margin:28px 0 20px;}
   .submit{
     padding:18px 80px; background:var(--cyan); color:#000;
@@ -160,7 +151,6 @@
     cursor:pointer; box-shadow:var(--glow-cyan); transition:all .5s;
   }
   .submit.short{background:var(--pink);box-shadow:var(--glow-pink);}
-
   .confluence-score{
     margin-top:12px; font-size:1.3rem; font-weight:900;
     color:#0f0; text-shadow:0 0 10px #0f0;
@@ -173,10 +163,8 @@
 </style>
 </head>
 <body>
-
 <div class="nebula"></div>
 <div class="stars" id="stars"></div>
-
 <div class="container" id="container">
   <header>
     <h1 id="title">KHALID DAILY JOURNAL</h1>
@@ -184,13 +172,17 @@
     <div class="quote" id="short-quote" style="display:none">THEY DOUBTED ME · NOW THEY WATCH IN SILENCE</div>
   </header>
 
-  <form method="post" action="https://script.google.com/macros/s/AKfycbyx0lL7L4oF8lD8vhXI93sXrbI3R3V4C8WUoAHye9P4gqJo2zTSbihyO-d1cIQLvOA-gg/exec" id="tradeForm">
-    
+  <!-- FORM WITH NEW URL + HIDDEN IFRAME -->
+  <form method="post" 
+        action="https://script.google.com/macros/s/AKfAndSoOn/exec" 
+        id="tradeForm" 
+        target="hidden-iframe">
+    <iframe name="hidden-iframe" style="display:none;"></iframe>
+
     <div class="direction">
       <div class="dir-btn buy active" onclick="setDir('BUY',this)">LONG</div>
       <div class="dir-btn sell" onclick="setDir('SELL',this)">SHORT</div>
     </div>
-
     <div class="main-grid">
       <!-- TRADE DETAILS -->
       <div class="card">
@@ -201,7 +193,6 @@
         <div class="form-group"><input type="number" step="0.01" name="lot" required placeholder=" "><label>Lot Size</label></div>
         <div class="form-group"><input type="number" step="0.00001" name="openprice" required placeholder=" "><label>Open Price</label></div>
       </div>
-
       <!-- RISK & EXIT -->
       <div class="card">
         <h3>RISK & EXIT</h3>
@@ -210,7 +201,6 @@
         <div class="form-group"><input type="number" step="0.00001" name="close" placeholder=" "><label>Close Price</label></div>
         <div class="form-group"><input type="datetime-local" name="opentime" required><label>Open Time</label></div>
       </div>
-
       <!-- CONFLUENCE -->
       <div class="card" id="confluence-card">
         <h3 id="conf-title">LONG CONFLUENCE</h3>
@@ -219,7 +209,6 @@
         <div class="tier" id="tier">NO ENTRY</div>
       </div>
     </div>
-
     <div class="submit-wrapper">
       <button type="submit" class="submit" id="submit-btn">POST</button>
     </div>
@@ -228,18 +217,13 @@
 
 <!-- FULL SYMBOL LIST -->
 <datalist id="symbols">
-  <!-- MAJORS -->
   <option value="EURUSD"><option value="GBPUSD"><option value="USDJPY"><option value="AUDUSD">
   <option value="USDCAD"><option value="USDCHF"><option value="NZDUSD"><option value="EURGBP">
-  
-  <!-- MINORS -->
   <option value="EURJPY"><option value="GBPJPY"><option value="AUDJPY"><option value="EURCHF">
   <option value="EURCAD"><option value="EURAUD"><option value="EURNZD"><option value="GBPCHF">
   <option value="GBPCAD"><option value="GBPAUD"><option value="GBPNZD"><option value="CADJPY">
   <option value="CHFJPY"><option value="AUDCAD"><option value="AUDCHF"><option value="AUDNZD">
   <option value="NZDCAD"><option value="NZDCHF"><option value="NZDJPY"><option value="CADCHF">
-  
-  <!-- EXOTICS -->
   <option value="USDMXN"><option value="USDTRY"><option value="USDZAR"><option value="USDSGD">
   <option value="USDCNH"><option value="USDHKD"><option value="USDNOK"><option value="USDSEK">
   <option value="EURTRY"><option value="EURPLN"><option value="EURSEK"><option value="EURNOK">
@@ -247,13 +231,9 @@
   <option value="EURMXN"><option value="GBPMXN"><option value="GBPPLN"><option value="GBPZAR">
   <option value="TRYJPY"><option value="MXNJPY"><option value="ZARJPY"><option value="SGDJPY">
   <option value="NOKJPY"><option value="SEKJPY"><option value="DKKJPY"><option value="HUFJPY">
-  
-  <!-- METALS & INDICES -->
   <option value="XAUUSD"><option value="XAGUSD"><option value="US30"><option value="NAS100">
   <option value="SPX500"><option value="GER40"><option value="UK100"><option value="JPN225">
   <option value="AUS200"><option value="FRA40"><option value="HK50"><option value="CHN50">
-  
-  <!-- CRYPTO -->
   <option value="BTCUSD"><option value="ETHUSD"><option value="LTCUSD"><option value="BCHUSD">
   <option value="XRPUSD"><option value="ADAUSD"><option value="DOTUSD"><option value="SOLUSD">
 </datalist>
@@ -305,14 +285,12 @@ function renderConfluence(isShort) {
   const data = isShort ? shortConfluence : longConfluence;
   boostList.innerHTML = '';
   confluence = 0;
-
   data.forEach(item => {
     const div = document.createElement('div');
     div.className = 'check-item';
     div.innerHTML = `<span>${item.text}</span><span class="weight">+${item.weight}%</span><input type="checkbox" class="boost" data-weight="${item.weight}" ${item.req ? 'data-req' : ''}>`;
     boostList.appendChild(div);
   });
-
   confTitle.textContent = isShort ? "SHORT CONFLUENCE" : "LONG CONFLUENCE";
   document.querySelectorAll('.boost').forEach(b => b.onchange = updateConfluence);
   updateConfluence();
