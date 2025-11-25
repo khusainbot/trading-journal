@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+  const password = prompt("Enter password to access KHALID JOURNAL:");
+  if (password !== "khalid2025") {  // CHANGE THIS
+    document.body.innerHTML = "<h1 style='color:red;text-align:center;margin-top:20%;'>ACCESS DENIED</h1>";
+    throw new Error("Wrong password");
+  }
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>KHALID DAILY JOURNAL</title>
@@ -339,3 +346,4 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
