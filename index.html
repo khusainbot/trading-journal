@@ -6,46 +6,176 @@
 <title>KHALID DAILY JOURNAL</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
-  :root{--cyan:#00ffff;--pink:#ff3366;--glow-cyan:0 0 40px rgba(0,255,255,0.8);--glow-pink:0 0 40px rgba(255,51,102,0.8);}
+  :root{
+    --cyan:#00ffff;--pink:#ff3366;
+    --glow-cyan:0 0 50px rgba(0,255,255,0.9);--glow-pink:0 0 50px rgba(255,51,102,0.9);
+    --dark:#0a0f23;--darker:#0d1428;
+  }
   *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:'Orbitron',sans-serif;background:#000;color:#fff;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px;}
-  .container{width:100%;max-width:1100px;background:rgba(10,15,35,0.97);border-radius:32px;overflow:hidden;border:3px solid var(--cyan);box-shadow:0 0 80px rgba(0,255,255,0.5);transition:all .7s;}
-  .container.short{border-color:var(--pink);box-shadow:0 0 80px rgba(255,51,102,0.6);}
-  header{background:var(--cyan);padding:22px 20px;text-align:center;transition:background .7s;position:relative;overflow:hidden;}
+  
+  body{
+    font-family:'Orbitron',sans-serif;
+    background: #000;
+    color:#fff;
+    min-height:100vh;
+    overflow:hidden;
+    position:relative;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+  }
+
+  .nebula{
+    position:fixed;
+    top:0; left:0; width:100%; height:100%;
+    background: radial-gradient(circle at 20% 80%, #1a0033 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, #001133 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, #000033 0%, #000 100%);
+    opacity:0.6;
+    z-index:-3;
+    animation: nebulaPulse 20s infinite alternate;
+  }
+  @keyframes nebulaPulse{
+    0%{transform:scale(1); opacity:0.5;}
+    100%{transform:scale(1.1); opacity:0.7;}
+  }
+
+  .stars{
+    position:fixed;
+    top:0; left:0; width:100%; height:100%;
+    background: transparent;
+    z-index:-2;
+  }
+  .star{
+    position:absolute;
+    background:#fff;
+    border-radius:50%;
+    box-shadow:0 0 10px #fff;
+    animation: twinkle 3s infinite alternate;
+  }
+  @keyframes twinkle{
+    0%{opacity:0.3; transform:scale(0.8);}
+    100%{opacity:1; transform:scale(1.2);}
+  }
+
+  .container{
+    width:100%; max-width:1100px;
+    background:rgba(10,15,35,0.95);
+    border-radius:32px;
+    overflow:hidden;
+    border:3px solid var(--cyan);
+    box-shadow:0 0 100px rgba(0,255,255,0.6), inset 0 0 40px rgba(0,255,255,0.1);
+    transition:all .7s;
+    position:relative;
+    z-index:10;
+  }
+  .container.short{
+    border-color:var(--pink);
+    box-shadow:0 0 100px rgba(255,51,102,0.7), inset 0 0 40px rgba(255,51,102,0.1);
+  }
+
+  header{
+    background:var(--cyan);
+    padding:18px 20px;
+    text-align:center;
+    transition:background .7s;
+    position:relative;
+    overflow:hidden;
+  }
   .container.short header{background:var(--pink);}
-  #title{font-size:2.6rem;font-weight:900;color:#000;letter-spacing:5px;text-shadow:0 0 20px #fff;animation:titlePulse 4s infinite;}
-  .quote{margin:14px auto 0;width:78%;background:rgba(0,0,0,0.55);padding:11px 20px;border-radius:30px;font-size:0.95rem;font-weight:800;letter-spacing:4px;opacity:0;transform:translateY(10px);animation:quoteFade 1.2s forwards 0.6s;box-shadow:inset 0 0 20px rgba(0,0,0,0.6);}
-  @keyframes titlePulse{0%,100%{text-shadow:0 0 20px #fff;}50%{text-shadow:0 0 40px #fff, 0 0 60px var(--cyan);}}
-  @keyframes quoteFade{to{opacity:1;transform:translateY(0);}}
-  .direction{display:flex;justify-content:center;gap:30px;margin:28px 0 32px;}
-  .dir-btn{padding:18px 62px;border-radius:50px;font-size:1.5rem;font-weight:900;cursor:pointer;transition:all .5s;box-shadow:var(--glow-cyan);}
+  #title{font-size:2.4rem;font-weight:900;color:#000;letter-spacing:5px;text-shadow:0 0 20px #fff;}
+  .quote{
+    margin:10px auto 0; width:80%;
+    background:rgba(0,0,0,0.6); padding:9px 20px;
+    border-radius:30px; font-size:0.9rem; font-weight:800; letter-spacing:3px;
+    box-shadow:inset 0 0 20px rgba(0,0,0,0.6);
+  }
+
+  .direction{display:flex;justify-content:center;gap:30px;margin:24px 0 28px;}
+  .dir-btn{
+    padding:16px 58px; border-radius:50px; font-size:1.4rem; font-weight:900;
+    cursor:pointer; transition:all .5s; box-shadow:var(--glow-cyan);
+  }
   .buy{background:var(--cyan);color:#000;}
   .sell{background:#330011;color:var(--pink);border:3px solid var(--pink);}
   .sell.active{background:var(--pink);color:#fff;box-shadow:var(--glow-pink);}
-  .cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;padding:0 30px 30px;}
-  .card{background:rgba(15,25,60,0.9);border-radius:24px;padding:22px;border:2px solid var(--cyan);box-shadow:var(--glow-cyan);transition:all .5s;}
+
+  .main-grid{
+    display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px;
+    padding:0 30px 30px;
+  }
+  .card{
+    background:rgba(15,25,60,0.95);
+    border-radius:24px; padding:22px;
+    border:2px solid var(--cyan); box-shadow:var(--glow-cyan);
+    transition:all .5s; backdrop-filter:blur(8px);
+  }
   .container.short .card{border-color:var(--pink);box-shadow:var(--glow-pink);}
-  .card h3{text-align:center;font-size:1.3rem;margin-bottom:18px;color:var(--cyan);text-shadow:0 0 15px;}
+  .card h3{
+    text-align:center; font-size:1.25rem; margin-bottom:16px;
+    color:var(--cyan); text-shadow:0 0 15px; letter-spacing:1px;
+  }
   .container.short .card h3{color:var(--pink);}
-  .check-item{display:flex;align-items:center;justify-content:space-between;padding:13px 0;font-size:0.98rem;font-weight:700;border-bottom:1px solid rgba(255,255,255,0.1);}
-  .check-item input[type=checkbox]{width:34px;height:34px;accent-color:var(--cyan);filter:drop-shadow(0 0 14px var(--cyan));}
-  .container.short .check-item input[type=checkbox]{accent-color:var(--pink);filter:drop-shadow(0 0 14px var(--pink));}
-  .checklist-result{margin-top:22px;padding:18px;border-radius:18px;text-align:center;font-size:1.15rem;font-weight:900;background:rgba(255,255,255,0.08);letter-spacing:2px;}
-  .checklist-result.ready{background:var(--cyan);color:#000;box-shadow:var(--glow-cyan);}
-  .container.short .checklist-result.ready{background:var(--pink);color:#fff;}
-  .form-group{position:relative;margin:16px 0;}
-  input{width:100%;padding:16px 18px;background:#0d1428;border:2px solid #333;border-radius:16px;color:#fff;font-size:1rem;transition:all .4s;}
-  input:focus{border-color:var(--cyan);box-shadow:var(--glow-cyan);outline:none;}
+
+  .check-item{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:11px 0; font-size:0.95rem; font-weight:700;
+    border-bottom:1px solid rgba(255,255,255,0.1);
+  }
+  .check-item input[type=checkbox]{
+    width:32px; height:32px; accent-color:var(--cyan);
+    filter:drop-shadow(0 0 12px var(--cyan));
+  }
+  .container.short .check-item input[type=checkbox]{
+    accent-color:var(--pink); filter:drop-shadow(0 0 12px var(--pink));
+  }
+  .check-item .weight{font-size:0.72rem;color:#0f0;opacity:0.8;}
+
+  .form-group{position:relative;margin:14px 0;}
+  input{
+    width:100%; padding:14px 16px; background:var(--darker);
+    border:2px solid #333; border-radius:16px; color:#fff;
+    font-size:0.95rem; transition:all .4s;
+  }
+  input:focus{
+    border-color:var(--cyan); box-shadow:var(--glow-cyan); outline:none;
+  }
   .container.short input:focus{border-color:var(--pink);box-shadow:var(--glow-pink);}
-  label{position:absolute;top:50%;left:18px;transform:translateY(-50%);color:#888;font-size:0.95rem;pointer-events:none;transition:all .4s;}
-  input:focus + label,input:not(:placeholder-shown) + label{top:-10px;left:14px;font-size:0.75rem;background:rgba(10,15,35,0.9);padding:0 10px;color:var(--cyan);font-weight:900;}
-  .container.short input:focus + label,.container.short input:not(:placeholder-shown) + label{color:var(--pink);}
-  .submit-wrapper{text-align:center;margin:30px 0 20px;}
-  .submit{padding:20px 90px;background:var(--cyan);color:#000;border:none;border-radius:50px;font-size:1.8rem;font-weight:900;cursor:pointer;box-shadow:var(--glow-cyan);transition:all .5s;}
+  label{
+    position:absolute; top:50%; left:16px; transform:translateY(-50%);
+    color:#888; font-size:0.9rem; pointer-events:none; transition:all .4s;
+  }
+  input:focus + label, input:not(:placeholder-shown) + label{
+    top:-10px; left:12px; font-size:0.7rem; background:rgba(10,15,35,0.9);
+    padding:0 8px; color:var(--cyan); font-weight:900;
+  }
+  .container.short input:focus + label,
+  .container.short input:not(:placeholder-shown) + label{color:var(--pink);}
+
+  .submit-wrapper{text-align:center;margin:28px 0 20px;}
+  .submit{
+    padding:18px 80px; background:var(--cyan); color:#000;
+    border:none; border-radius:50px; font-size:1.6rem; font-weight:900;
+    cursor:pointer; box-shadow:var(--glow-cyan); transition:all .5s;
+  }
   .submit.short{background:var(--pink);box-shadow:var(--glow-pink);}
+
+  .confluence-score{
+    margin-top:12px; font-size:1.3rem; font-weight:900;
+    color:#0f0; text-shadow:0 0 10px #0f0;
+  }
+  .container.short .confluence-score{color:#f06; text-shadow:0 0 10px #f06;}
+  .tier{color:#aaa;font-size:0.85rem;margin-top:4px;}
+  .no-go{color:#f66;}.entry-ok{color:#ff0;}.strong{color:#0f0;}
+  .s-tier{color:var(--cyan);text-shadow:0 0 15px var(--cyan);}
+  .container.short .s-tier{color:var(--pink);}
 </style>
 </head>
 <body>
+
+<div class="nebula"></div>
+<div class="stars" id="stars"></div>
 
 <div class="container" id="container">
   <header>
@@ -54,25 +184,15 @@
     <div class="quote" id="short-quote" style="display:none">THEY DOUBTED ME · NOW THEY WATCH IN SILENCE</div>
   </header>
 
-  <form method="post" action="https://script.google.com/macros/s/AKfycbyx0lL7L4oF8lD8vhXI93sXrbI3R3V4C8WUoAHye9P4gqJo2zTSbihyO-d1cIQLvOA-gg/exec">
+  <form method="post" action="https://script.google.com/macros/s/AKfycbyx0lL7L4oF8lD8vhXI93sXrbI3R3V4C8WUoAHye9P4gqJo2zTSbihyO-d1cIQLvOA-gg/exec" id="tradeForm">
     
     <div class="direction">
       <div class="dir-btn buy active" onclick="setDir('BUY',this)">LONG</div>
       <div class="dir-btn sell" onclick="setDir('SELL',this)">SHORT</div>
     </div>
 
-    <div class="cards">
-      <div class="card">
-        <h3>ENTRY CHECKLIST</h3>
-        <div id="checklist">
-          <div class="check-item"><span id="i1">HTF Trend: Daily + 4H Bullish</span><input type="checkbox" class="chk"></div>
-          <div class="check-item"><span id="i2">Price takes support at Pivot / S1 / S2</span><input type="checkbox" class="chk"></div>
-          <div class="check-item"><span id="i3">Bullish rejection / engulfing candle</span><input type="checkbox" class="chk"></div>
-          <div class="check-item"><span id="i4">RSI: 40–60 (oversold bounce)</span><input type="checkbox" class="chk"></div>
-          <div class="checklist-result" id="result">— Wait — Not all boxes ticked</div>
-        </div>
-      </div>
-
+    <div class="main-grid">
+      <!-- TRADE DETAILS -->
       <div class="card">
         <h3>TRADE DETAILS</h3>
         <div class="form-group"><input type="number" name="ticket" required placeholder=" "><label>Ticket</label></div>
@@ -82,12 +202,21 @@
         <div class="form-group"><input type="number" step="0.00001" name="openprice" required placeholder=" "><label>Open Price</label></div>
       </div>
 
+      <!-- RISK & EXIT -->
       <div class="card">
         <h3>RISK & EXIT</h3>
         <div class="form-group"><input type="number" step="0.00001" name="sl" required placeholder=" "><label>Stop Loss</label></div>
         <div class="form-group"><input type="number" step="0.00001" name="tp" required placeholder=" "><label>Take Profit</label></div>
         <div class="form-group"><input type="number" step="0.00001" name="close" placeholder=" "><label>Close Price</label></div>
         <div class="form-group"><input type="datetime-local" name="opentime" required><label>Open Time</label></div>
+      </div>
+
+      <!-- CONFLUENCE -->
+      <div class="card" id="confluence-card">
+        <h3 id="conf-title">LONG CONFLUENCE</h3>
+        <div id="boostlist"></div>
+        <div class="confluence-score" id="score">Confluence: 0%</div>
+        <div class="tier" id="tier">NO ENTRY</div>
       </div>
     </div>
 
@@ -97,85 +226,137 @@
   </form>
 </div>
 
-<!-- COMPLETE 90+ SYMBOL LIST -->
+<!-- FULL SYMBOL LIST -->
 <datalist id="symbols">
+  <!-- MAJORS -->
   <option value="EURUSD"><option value="GBPUSD"><option value="USDJPY"><option value="AUDUSD">
-  <option value="USDCAD"><option value="USDCHF"><option value="NZDUSD">
-  <option value="EURGBP"><option value="EURAUD"><option value="EURCAD"><option value="EURCHF">
-  <option value="EURNZD"><option value="EURJPY"><option value="GBPAUD"><option value="GBPCAD">
-  <option value="GBPCHF"><option value="GBPNZD"><option value="GBPJPY"><option value="AUDCAD">
-  <option value="AUDCHF"><option value="AUDJPY"><option value="AUDNZD"><option value="CADCHF">
-  <option value="CADJPY"><option value="CHFJPY"><option value="NZDCAD"><option value="NZDCHF">
-  <option value="NZDJPY"><option value="EURTRY"><option value="USDTRY"><option value="EURPLN">
-  <option value="USDMXN"><option value="USDZAR"><option value="USDSGD"><option value="USDSEK">
-  <option value="USDNOK"><option value="EURSEK"><option value="EURNOK"><option value="USDHKD">
-  <option value="USDCNH"><option value="EURHUF"><option value="USDHUF"><option value="USDCZK">
-  <option value="USDDKK"><option value="EURDKK"><option value="USDRUB"><option value="EURRUB">
-  <option value="XAUUSD"><option value="XAGUSD"><option value="XPTUSD"><option value="XPDUSD">
-  <option value="UKOIL"><option value="USOIL"><option value="NGAS">
+  <option value="USDCAD"><option value="USDCHF"><option value="NZDUSD"><option value="EURGBP">
+  
+  <!-- MINORS -->
+  <option value="EURJPY"><option value="GBPJPY"><option value="AUDJPY"><option value="EURCHF">
+  <option value="EURCAD"><option value="EURAUD"><option value="EURNZD"><option value="GBPCHF">
+  <option value="GBPCAD"><option value="GBPAUD"><option value="GBPNZD"><option value="CADJPY">
+  <option value="CHFJPY"><option value="AUDCAD"><option value="AUDCHF"><option value="AUDNZD">
+  <option value="NZDCAD"><option value="NZDCHF"><option value="NZDJPY"><option value="CADCHF">
+  
+  <!-- EXOTICS -->
+  <option value="USDMXN"><option value="USDTRY"><option value="USDZAR"><option value="USDSGD">
+  <option value="USDCNH"><option value="USDHKD"><option value="USDNOK"><option value="USDSEK">
+  <option value="EURTRY"><option value="EURPLN"><option value="EURSEK"><option value="EURNOK">
+  <option value="EURCZK"><option value="EURHUF"><option value="EURDKK"><option value="EURZAR">
+  <option value="EURMXN"><option value="GBPMXN"><option value="GBPPLN"><option value="GBPZAR">
+  <option value="TRYJPY"><option value="MXNJPY"><option value="ZARJPY"><option value="SGDJPY">
+  <option value="NOKJPY"><option value="SEKJPY"><option value="DKKJPY"><option value="HUFJPY">
+  
+  <!-- METALS & INDICES -->
+  <option value="XAUUSD"><option value="XAGUSD"><option value="US30"><option value="NAS100">
+  <option value="SPX500"><option value="GER40"><option value="UK100"><option value="JPN225">
+  <option value="AUS200"><option value="FRA40"><option value="HK50"><option value="CHN50">
+  
+  <!-- CRYPTO -->
   <option value="BTCUSD"><option value="ETHUSD"><option value="LTCUSD"><option value="BCHUSD">
-  <option value="XRPUSD"><option value="ADAUSD"><option value="SOLUSD"><option value="DOTUSD">
-  <option value="LINKUSD"><option value="AVAXUSD"><option value="MATICUSD">
-  <option value="US30"><option value="US500"><option value="NAS100"><option value="GER40">
-  <option value="UK100"><option value="FRA40"><option value="JPN225"><option value="AUS200">
-  <option value="EU50"><option value="ESP35"><option value="HK50"><option value="CHN50">
+  <option value="XRPUSD"><option value="ADAUSD"><option value="DOTUSD"><option value="SOLUSD">
 </datalist>
 
 <script>
-let checklistOK = false;
+// Generate Stars
+const starsContainer = document.getElementById('stars');
+for(let i=0; i<120; i++){
+  const star = document.createElement('div');
+  star.className = 'star';
+  star.style.width = star.style.height = Math.random() * 3 + 'px';
+  star.style.left = Math.random() * 100 + '%';
+  star.style.top = Math.random() * 100 + '%';
+  star.style.animationDelay = Math.random() * 3 + 's';
+  starsContainer.appendChild(star);
+}
+
+// Confluence Logic
+let confluence = 0;
 const container = document.getElementById('container');
-const result = document.getElementById('result');
+const scoreEl = document.getElementById('score');
+const tierEl = document.getElementById('tier');
+const boostList = document.getElementById('boostlist');
+const confTitle = document.getElementById('conf-title');
 
-const longItems = [
-  "HTF Trend: Daily + 4H Bullish",
-  "Price takes support at Pivot / S1 / S2",
-  "Bullish rejection / engulfing candle",
-  "RSI: 40–60 (oversold bounce)"
-];
-const shortItems = [
-  "HTF Trend: Daily + 4H Bearish",
-  "Price rejects from Pivot / R1",
-  "Bearish rejection / engulfing candle",
-  "RSI: 40–60 (overbought drop)"
+const longConfluence = [
+  {text: "HTF Bullish (D1 + H4)", weight: 25, req: true},
+  {text: "RSI < 40 (Oversold)", weight: 25, req: true},
+  {text: "Price ≥ Pivot OR touches S1", weight: 15, req: true},
+  {text: "Bullish Trendline Touch", weight: 10},
+  {text: "Volume Spike (Bullish)", weight: 8},
+  {text: "Fib 61.8% / 78.6% Bounce", weight: 10},
+  {text: "Breaker Block (Bullish)", weight: 12},
+  {text: "Bullish Candle Pattern", weight: 8}
 ];
 
-function updateChecklist(){
-  const all = [...document.querySelectorAll('.chk')].every(c => c.checked);
-  checklistOK = all;
-  result.textContent = all 
-    ? (container.classList.contains('short') ? 'ALL RED → ENTER SHORT NOW!' : 'ALL GREEN → ENTER LONG NOW!')
-    : '— Wait — Not all boxes ticked';
-  result.classList.toggle('ready', all);
+const shortConfluence = [
+  {text: "HTF Bearish (D1 + H4)", weight: 25, req: true},
+  {text: "RSI > 60 (Overbought)", weight: 25, req: true},
+  {text: "Price ≤ Pivot OR touches R1", weight: 15, req: true},
+  {text: "Bearish Trendline Touch", weight: 10},
+  {text: "Volume Spike (Bearish)", weight: 8},
+  {text: "Fib 61.8% / 78.6% Rejection", weight: 10},
+  {text: "Breaker Block (Bearish)", weight: 12},
+  {text: "Bearish Candle Pattern", weight: 8}
+];
+
+function renderConfluence(isShort) {
+  const data = isShort ? shortConfluence : longConfluence;
+  boostList.innerHTML = '';
+  confluence = 0;
+
+  data.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'check-item';
+    div.innerHTML = `<span>${item.text}</span><span class="weight">+${item.weight}%</span><input type="checkbox" class="boost" data-weight="${item.weight}" ${item.req ? 'data-req' : ''}>`;
+    boostList.appendChild(div);
+  });
+
+  confTitle.textContent = isShort ? "SHORT CONFLUENCE" : "LONG CONFLUENCE";
+  document.querySelectorAll('.boost').forEach(b => b.onchange = updateConfluence);
+  updateConfluence();
+}
+
+function updateConfluence() {
+  confluence = 0;
+  document.querySelectorAll('.boost').forEach(b => {
+    if (b.checked) confluence += parseInt(b.dataset.weight);
+  });
+  scoreEl.textContent = `Confluence: ${confluence}%`;
+  let tier = '', cls = '';
+  if (confluence < 65) { tier = 'NO ENTRY'; cls = 'no-go'; }
+  else if (confluence < 80) { tier = 'ENTRY OK'; cls = 'entry-ok'; }
+  else if (confluence < 95) { tier = 'STRONG'; cls = 'strong'; }
+  else { tier = 'S-TIER'; cls = 's-tier'; }
+  tierEl.textContent = tier;
+  tierEl.className = 'tier ' + cls;
 }
 
 function setDir(dir, el){
   document.querySelector('[name="order"]').value = dir;
   document.querySelectorAll('.dir-btn').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
-  const isShort = dir==='SELL';
+  const isShort = dir === 'SELL';
   container.classList.toggle('short', isShort);
   document.getElementById('submit-btn').classList.toggle('short', isShort);
   document.getElementById('long-quote').style.display = isShort ? 'none' : 'block';
   document.getElementById('short-quote').style.display = isShort ? 'block' : 'none';
-
-  const items = isShort ? shortItems : longItems;
-  document.getElementById('i1').textContent = items[0];
-  document.getElementById('i2').textContent = items[1];
-  document.getElementById('i3').textContent = items[2];
-  document.getElementById('i4').textContent = items[3];
-
-  document.querySelectorAll('.chk').forEach(c => c.checked = false);
-  updateChecklist();
+  renderConfluence(isShort);
+  document.querySelectorAll('.boost').forEach(c => c.checked = false);
+  updateConfluence();
 }
 
-document.querySelector('form').onsubmit = e => {
-  if (!checklistOK) { e.preventDefault(); alert('Complete the checklist first, King!'); }
+document.getElementById('tradeForm').onsubmit = e => {
+  if (confluence < 65) {
+    e.preventDefault();
+    alert(`Confluence: ${confluence}% — Need 65%+ to POST`);
+  }
 };
 
-document.querySelectorAll('.chk').forEach(c => c.onchange = updateChecklist);
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('[name="opentime"]').value = new Date().toISOString().slice(0,16);
-  updateChecklist();
+  renderConfluence(false);
 });
 </script>
 </body>
