@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>TRADE LOGGED</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{
+      background:#000;
+      color:#0ff;
+      font-family:'Orbitron',sans-serif;
+      overflow:hidden;
+      height:100vh;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      position:relative;
+    }
+    .city{
+      position:fixed;top:0;left:0;width:100%;height:100%;
+      background:linear-gradient(135deg,#0a001f,#1a0033,#000), 
+                 url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80') center/cover;
+      filter:brightness(0.8) contrast(1.3) hue-rotate(10deg);
+      z-index:-2;
+    }
+    canvas{position:fixed;top:0;left:0;z-index:-1;opacity:0.2;}
+    .glitch{
+      font-size:5rem;font-weight:900;letter-spacing:10px;
+      text-shadow:0 0 20px #0ff,0 0 40px #0ff,0 0 80px #0ff;
+      animation:pulse 2s infinite;
+      position:relative;
+    }
+    .glitch::before,.glitch::after{
+      content:'TRADE LOGGED';
+      position:absolute;top:0;left:0;width:100%;
+      color:#f0f;opacity:0.8;
+    }
+    .glitch::before{animation:glitch1 0.5s infinite;clip-path:polygon(0 0,100% 0,100% 40%,0 40%);}
+    .glitch::after{animation:glitch2 0.5s infinite;clip-path:polygon(0 60%,100% 60%,100% 100%,0 100%);}
+    @keyframes pulse{0%,100%{text-shadow:0 0 20px #0ff,0 0 40px,0 0 80px;}50%{text-shadow:0 0 40px #0ff,0 0 80px,0 0 120px;}}
+    @keyframes glitch1{0%,100%{transform:translate(0);}20%{transform:translate(-3px,3px);}40%{transform:translate(3px,-3px);}}
+    @keyframes glitch2{0%,100%{transform:translate(0);}30%{transform:translate(4px,-2px);}60%{transform:translate(-4px,2px);}}
+    .sub{font-size:1.8rem;color:#f0f;text-shadow:0 0 30px #f0f;margin:20px 0;}
+    .back{
+      margin-top:40px;padding:16px 60px;background:transparent;
+      border:3px solid #9d00ff;color:#9d00ff;font-size:1.3rem;font-weight:900;
+      border-radius:50px;cursor:pointer;text-shadow:0 0 20px #9d00ff;
+      box-shadow:0 0 40px rgba(157,0,255,0.6);transition:0.4s;
+    }
+    .back:hover{background:#9d00ff;color:#000;transform:scale(1.05);}
+    .scanlines{
+      position:fixed;top:0;left:0;width:100%;height:100%;
+      background:repeating-linear-gradient(0deg,rgba(0,0,0,0.1),rgba(0,0,0,0.1) 1px,transparent 1px,transparent 2px);
+      pointer-events:none;z-index:1;opacity:0.3;
+    }
+  </style>
+</head>
+<body>
+  <div class="city"></div>
+  <canvas id="matrix"></canvas>
+  <div class="scanlines"></div>
+
+  <div class="glitch">TRADE LOGGED</div>
+  <div class="sub">CONFLUENCE VALIDATED · P&L SECURED</div>
+  <button class="back" onclick="window.location.href='index.html'">NEW TRADE</button>
+
+  <script>
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+    canvas.width = innerWidth; canvas.height = innerHeight;
+    const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+    const fontSize = 16;
+    const cols = canvas.width / fontSize;
+    const drops = Array(Math.floor(cols)).fill(1);
+
+    function draw() {
+      ctx.fillStyle = 'rgba(0,0,0,0.05)';
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle = '#0f0';
+      ctx.font = fontSize + 'px monospace';
+      for(let i=0;i<drops.length;i++){
+        const text = chars[Math.floor(Math.random()*chars.length)];
+        ctx.fillText(text,i*fontSize,drops[i]*fontSize);
+        if(drops[i]*fontSize > canvas.height && Math.random()>0.975) drops[i]=0;
+        drops[i]++;
+      }
+    }
+    setInterval(draw,35);
+    window.onresize = ()=>{canvas.width=innerWidth;canvas.height=innerHeight;};
+  </script>
+</body>
+</html>
